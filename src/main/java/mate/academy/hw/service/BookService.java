@@ -1,7 +1,7 @@
-package hw.srevices;
+package mate.academy.hw.service;
 
-import hw.models.Book;
 import java.util.List;
+import mate.academy.hw.model.Book;
 
 public interface BookService {
     Book save(Book book);

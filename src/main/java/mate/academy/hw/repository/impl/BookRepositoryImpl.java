@@ -1,9 +1,9 @@
-package hw.repositories.impl;
+package mate.academy.hw.repository.impl;
 
-import hw.models.Book;
-import hw.repositories.BookRepository;
 import jakarta.persistence.criteria.CriteriaQuery;
 import java.util.List;
+import mate.academy.hw.model.Book;
+import mate.academy.hw.repository.BookRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -28,29 +28,28 @@ public class BookRepositoryImpl implements BookRepository {
             transaction = session.beginTransaction();
             session.persist(book);
             transaction.commit();
-            return book;
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new RuntimeException("Can't add new book: " + book, e);
+            throw new RuntimeException("Can't add a new book: " + book, e);
         } finally {
             if (session != null) {
                 session.close();
             }
         }
+        return book;
     }
 
     @Override
     public List<Book> findAll() {
         try (Session session = sessionFactory.openSession()) {
-            CriteriaQuery<Book> criteriaQuery = session.getCriteriaBuilder()
-                    .createQuery(Book.class);
-            criteriaQuery.from(Book.class);
-            return session.createQuery(criteriaQuery)
-                    .getResultList();
+            CriteriaQuery<Book> query =
+                    session.getCriteriaBuilder().createQuery(Book.class);
+            query.from(Book.class);
+            return session.createQuery(query).getResultList();
         } catch (Exception e) {
-            throw new RuntimeException("Can't find all books", e);
+            throw new RuntimeException("Can't find any book", e);
         }
     }
 }

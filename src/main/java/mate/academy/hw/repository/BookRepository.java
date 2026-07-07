@@ -1,7 +1,7 @@
-package hw.repositories;
+package mate.academy.hw.repository;
 
-import hw.models.Book;
 import java.util.List;
+import mate.academy.hw.model.Book;
 
 public interface BookRepository {
     Book save(Book book);
