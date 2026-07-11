@@ -1,8 +1,8 @@
 package mate.academy.hw.repository.impl;
 
-import exceptrion.DataProcessingException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import mate.academy.hw.exceptrion.DataProcessingException;
 import mate.academy.hw.model.Book;
 import mate.academy.hw.repository.BookRepository;
 import org.hibernate.Session;
