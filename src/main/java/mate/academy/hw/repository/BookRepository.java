@@ -1,10 +1,13 @@
 package mate.academy.hw.repository;
 
 import java.util.List;
+import java.util.Optional;
 import mate.academy.hw.model.Book;
 
 public interface BookRepository {
     Book save(Book book);
+
+    Optional<Book> getById(Long id);
 
     List<Book> findAll();
 }
