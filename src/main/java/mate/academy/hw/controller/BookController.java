@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import mate.academy.hw.dto.BookDto;
 import mate.academy.hw.dto.CreateBookRequestDto;
 import mate.academy.hw.service.BookService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
@@ -21,6 +23,7 @@ public class BookController {
     private final BookService bookService;
 
     @PostMapping
+    @ResponseStatus(value = HttpStatus.CREATED)
     public BookDto createBook(@RequestBody CreateBookRequestDto requestDto) {
         return bookService.save(requestDto);
     }
