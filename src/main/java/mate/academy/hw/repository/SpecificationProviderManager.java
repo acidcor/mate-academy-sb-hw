@@ -1,4 +1,5 @@
 package mate.academy.hw.repository;
 
-public interface SpecifaicationProviderManager {
+public interface SpecificationProviderManager<T> {
+    SpecificationProvider<T> getSpecificationProvider(String key);
 }
