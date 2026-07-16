@@ -8,12 +8,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class BookSpecificationBuilder implements SpecificationBuilder<Book> {
-    @Autowired
-    private BookSpecificationProviderManager bookSpecificationProviderManager;
     private static final String FIELD_TITLE = "title";
     private static final String FIELD_ISBN = "isbn";
     private static final String FIELD_AUTHOR = "author";
-
+    @Autowired
+    private BookSpecificationProviderManager bookSpecificationProviderManager;
 
     @Override
     public Specification<Book> build(BookSearchParametersDto bookSearchParametersDto) {
