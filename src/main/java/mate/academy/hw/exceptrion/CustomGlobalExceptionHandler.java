@@ -4,44 +4,38 @@ import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import org.jspecify.annotations.Nullable;
-import org.springframework.http.HttpHeaders;
+import java.util.stream.Collectors;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@ControllerAdvice
-public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler {
-    @Override
-    protected @Nullable ResponseEntity<Object> handleMethodArgumentNotValid(
-            MethodArgumentNotValidException ex,
-            HttpHeaders headers,
-            HttpStatusCode status,
-            WebRequest request
-    ) {
+@RestControllerAdvice
+public class CustomGlobalExceptionHandler {
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Object> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.BAD_REQUEST);
-        List<String> errors = ex.getBindingResult().getAllErrors().stream()
-                .map(this::getErrorMassage)
-                .toList();
+
+        List<String> errors = ex.getBindingResult()
+                .getAllErrors().stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .collect(Collectors.toList());
+
         body.put("errors", errors);
-        return new ResponseEntity<>(body, headers, status);
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
-    private String getErrorMassage(ObjectError e) {
-        if (e instanceof FieldError) {
-            String field = ((FieldError) e).getField();
-            String message = e.getDefaultMessage();
-            return field + " " + message;
-        }
-        return e.getDefaultMessage();
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException ex) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        String error = ex.getMessage();
+        body.put("errors", error);
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 }
 
