@@ -1,6 +1,5 @@
 package mate.academy.hw.service;
 
-import java.util.List;
 import mate.academy.hw.dto.BookDto;
 import mate.academy.hw.dto.BookSearchParametersDto;
 import mate.academy.hw.dto.CreateBookRequestDto;
@@ -14,7 +13,7 @@ public interface BookService {
 
     Page<BookDto> findAll(Pageable pageable);
 
-    List<BookDto> search(BookSearchParametersDto searchParametersDto);
+    Page<BookDto> search(BookSearchParametersDto searchParametersDto, Pageable pageable);
 
     void delete(Long id);
 
