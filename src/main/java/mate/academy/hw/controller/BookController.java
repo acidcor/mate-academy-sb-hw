@@ -1,7 +1,6 @@
 package mate.academy.hw.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import mate.academy.hw.dto.BookDto;
@@ -29,7 +28,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class BookController {
     private final BookService bookService;
 
-    @Tag(name = "Create")
     @Operation(summary = "Add a new book")
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
@@ -37,7 +35,6 @@ public class BookController {
         return bookService.save(requestDto);
     }
 
-    @Tag(name = "find")
     @Operation(summary = "Return all books")
     @GetMapping
     public Page<BookDto> getAll(
@@ -46,14 +43,12 @@ public class BookController {
         return bookService.findAll(pageable);
     }
 
-    @Tag(name = "find")
     @Operation(summary = "Return book by ID")
     @GetMapping("{id}")
     public BookDto getBookById(@PathVariable Long id) {
         return bookService.findById(id);
     }
 
-    @Tag(name = "find")
     @Operation(summary = "Return all books with specs")
     @GetMapping("/search")
     public Page<BookDto> search(BookSearchParametersDto bookSearchParametersDto,
@@ -69,7 +64,6 @@ public class BookController {
         return bookService.search(bookSearchParametersDto, pageable);
     }
 
-    @Tag(name = "Update")
     @Operation(summary = "Update a single book")
     @PutMapping("{id}")
     public BookDto updateBook(
@@ -79,7 +73,6 @@ public class BookController {
         return bookService.update(id, requestDto);
     }
 
-    @Tag(name = "Delete")
     @Operation(summary = "Delete a single book")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("{id}")
