@@ -1,11 +1,14 @@
 package mate.academy.hw.controller;
 
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import mate.academy.hw.dto.BookDto;
 import mate.academy.hw.dto.BookSearchParametersDto;
 import mate.academy.hw.dto.CreateBookRequestDto;
 import mate.academy.hw.service.BookService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,13 +28,13 @@ public class BookController {
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    public BookDto createBook(@RequestBody CreateBookRequestDto requestDto) {
+    public BookDto createBook(@RequestBody @Valid CreateBookRequestDto requestDto) {
         return bookService.save(requestDto);
     }
 
     @GetMapping
-    public List<BookDto> getAll() {
-        return bookService.findAll();
+    public Page<BookDto> getAll(Pageable pageable) {
+        return bookService.findAll(pageable);
     }
 
     @GetMapping("{id}")
@@ -45,7 +48,10 @@ public class BookController {
     }
 
     @PutMapping("{id}")
-    public BookDto updateBook(@PathVariable Long id, @RequestBody CreateBookRequestDto requestDto) {
+    public BookDto updateBook(
+            @PathVariable Long id,
+            @RequestBody @Valid CreateBookRequestDto requestDto
+    ) {
         return bookService.update(id, requestDto);
     }
 
