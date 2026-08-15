@@ -1,8 +1,8 @@
-package mate.academy.hw.repository.book;
+package mate.academy.hw.repository.specifiacation.book.fields;
 
 import java.util.Arrays;
 import mate.academy.hw.model.Book;
-import mate.academy.hw.repository.SpecificationProvider;
+import mate.academy.hw.repository.specifiacation.SpecificationProvider;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 

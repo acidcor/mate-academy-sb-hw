@@ -3,10 +3,10 @@ package mate.academy.hw.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import mate.academy.hw.dto.BookDto;
-import mate.academy.hw.dto.BookSearchParametersDto;
-import mate.academy.hw.dto.CreateBookRequestDto;
-import mate.academy.hw.service.BookService;
+import mate.academy.hw.dto.book.BookCreateRequestDto;
+import mate.academy.hw.dto.book.BookResponseDto;
+import mate.academy.hw.dto.book.BookSearchParametersDto;
+import mate.academy.hw.service.book.BookService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -31,13 +31,13 @@ public class BookController {
     @Operation(summary = "Add a new book")
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    public BookDto createBook(@RequestBody @Valid CreateBookRequestDto requestDto) {
+    public BookResponseDto createBook(@RequestBody @Valid BookCreateRequestDto requestDto) {
         return bookService.save(requestDto);
     }
 
     @Operation(summary = "Return all books")
     @GetMapping
-    public Page<BookDto> getAll(
+    public Page<BookResponseDto> getAll(
             @SortDefault(value = "title", direction = Sort.Direction.ASC) Pageable pageable
     ) {
         return bookService.findAll(pageable);
@@ -45,30 +45,28 @@ public class BookController {
 
     @Operation(summary = "Return book by ID")
     @GetMapping("{id}")
-    public BookDto getBookById(@PathVariable Long id) {
+    public BookResponseDto getBookById(@PathVariable Long id) {
         return bookService.findById(id);
     }
 
     @Operation(summary = "Return all books with specs")
     @GetMapping("/search")
-    public Page<BookDto> search(BookSearchParametersDto bookSearchParametersDto,
-                                @SortDefault.SortDefaults({
-                                        @SortDefault(value = "title",
-                                                direction = Sort.Direction.ASC
-                                        ),
-                                        @SortDefault(value = "price",
-                                                direction = Sort.Direction.DESC
-                                        )
-                                })
+    public Page<BookResponseDto> search(BookSearchParametersDto bookSearchParametersDto,
+                                        @SortDefault.SortDefaults({
+                                            @SortDefault(value = "title",
+                                                direction = Sort.Direction.ASC),
+                                            @SortDefault(value = "price",
+                                                direction = Sort.Direction.DESC)
+                                        })
                                 Pageable pageable) {
         return bookService.search(bookSearchParametersDto, pageable);
     }
 
     @Operation(summary = "Update a single book")
     @PutMapping("{id}")
-    public BookDto updateBook(
+    public BookResponseDto updateBook(
             @PathVariable Long id,
-            @RequestBody @Valid CreateBookRequestDto requestDto
+            @RequestBody @Valid BookCreateRequestDto requestDto
     ) {
         return bookService.update(id, requestDto);
     }

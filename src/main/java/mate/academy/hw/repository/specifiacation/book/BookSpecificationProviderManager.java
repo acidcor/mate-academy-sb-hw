@@ -1,8 +1,10 @@
-package mate.academy.hw.repository;
+package mate.academy.hw.repository.specifiacation.book;
 
 import java.util.List;
 import mate.academy.hw.exceptrion.SpecificationProviderNotFoundException;
 import mate.academy.hw.model.Book;
+import mate.academy.hw.repository.specifiacation.SpecificationProvider;
+import mate.academy.hw.repository.specifiacation.SpecificationProviderManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

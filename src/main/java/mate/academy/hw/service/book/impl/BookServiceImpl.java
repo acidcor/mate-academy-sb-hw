@@ -1,16 +1,16 @@
-package mate.academy.hw.service.impl;
+package mate.academy.hw.service.book.impl;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import mate.academy.hw.dto.BookDto;
-import mate.academy.hw.dto.BookSearchParametersDto;
-import mate.academy.hw.dto.CreateBookRequestDto;
+import mate.academy.hw.dto.book.BookCreateRequestDto;
+import mate.academy.hw.dto.book.BookResponseDto;
+import mate.academy.hw.dto.book.BookSearchParametersDto;
 import mate.academy.hw.exceptrion.EntityNotFoundException;
 import mate.academy.hw.mapper.BookMapper;
 import mate.academy.hw.model.Book;
-import mate.academy.hw.repository.BookRepository;
-import mate.academy.hw.repository.BookSpecificationBuilder;
-import mate.academy.hw.service.BookService;
+import mate.academy.hw.repository.book.BookRepository;
+import mate.academy.hw.repository.specifiacation.book.BookSpecificationBuilder;
+import mate.academy.hw.service.book.BookService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -25,29 +25,32 @@ public class BookServiceImpl implements BookService {
     private final BookSpecificationBuilder specificationBuilder;
 
     @Override
-    public BookDto save(CreateBookRequestDto requestDto) {
+    public BookResponseDto save(BookCreateRequestDto requestDto) {
         Book book = bookMapper.toModel(requestDto);
         return bookMapper.toDto(repository.save(book));
     }
 
     @Override
-    public BookDto findById(Long id) {
+    public BookResponseDto findById(Long id) {
         return bookMapper.toDto(repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Can't find a book by id: " + id)));
     }
 
     @Override
-    public Page<BookDto> findAll(Pageable pageable) {
-        List<BookDto> list = repository.findAll(pageable).stream()
+    public Page<BookResponseDto> findAll(Pageable pageable) {
+        List<BookResponseDto> list = repository.findAll(pageable).stream()
                 .map(bookMapper::toDto)
                 .toList();
         return new PageImpl<>(list);
     }
 
     @Override
-    public Page<BookDto> search(BookSearchParametersDto searchParametersDto, Pageable pageable) {
+    public Page<BookResponseDto> search(
+            BookSearchParametersDto searchParametersDto,
+            Pageable pageable
+    ) {
         Specification<Book> specification = specificationBuilder.build(searchParametersDto);
-        List<BookDto> list = repository.findAll(specification, pageable).stream()
+        List<BookResponseDto> list = repository.findAll(specification, pageable).stream()
                 .map(bookMapper::toDto)
                 .toList();
         return new PageImpl<>(list);
@@ -59,7 +62,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookDto update(Long id, CreateBookRequestDto requestDto) {
+    public BookResponseDto update(Long id, BookCreateRequestDto requestDto) {
         Book book = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Can't find a book by id: " + id));
         bookMapper.updateFromCreateBookRequestDto(requestDto, book);
