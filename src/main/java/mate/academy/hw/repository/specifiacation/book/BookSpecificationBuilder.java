@@ -1,7 +1,8 @@
-package mate.academy.hw.repository;
+package mate.academy.hw.repository.specifiacation.book;
 
-import mate.academy.hw.dto.BookSearchParametersDto;
+import mate.academy.hw.dto.book.BookSearchParametersDto;
 import mate.academy.hw.model.Book;
+import mate.academy.hw.repository.specifiacation.SpecificationBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;

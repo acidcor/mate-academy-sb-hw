@@ -1,4 +1,4 @@
-package mate.academy.hw.dto;
+package mate.academy.hw.dto.book;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -11,7 +11,7 @@ import org.hibernate.validator.constraints.URL;
 
 @Getter
 @Setter
-public class CreateBookRequestDto {
+public class BookCreateRequestDto {
     @NotBlank
     private String title;
     @NotBlank

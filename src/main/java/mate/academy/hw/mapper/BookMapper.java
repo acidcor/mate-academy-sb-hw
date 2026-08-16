@@ -1,18 +1,18 @@
 package mate.academy.hw.mapper;
 
 import mate.academy.hw.config.MapperConfig;
-import mate.academy.hw.dto.BookDto;
-import mate.academy.hw.dto.CreateBookRequestDto;
+import mate.academy.hw.dto.book.BookCreateRequestDto;
+import mate.academy.hw.dto.book.BookResponseDto;
 import mate.academy.hw.model.Book;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
 @Mapper(config = MapperConfig.class)
 public interface BookMapper {
-    BookDto toDto(Book book);
+    BookResponseDto toDto(Book book);
 
-    Book toModel(CreateBookRequestDto requestDto);
+    Book toModel(BookCreateRequestDto requestDto);
 
-    void updateFromCreateBookRequestDto(CreateBookRequestDto requestDto,
-                                           @MappingTarget Book book);
+    void updateFromCreateBookRequestDto(BookCreateRequestDto requestDto,
+                                        @MappingTarget Book book);
 }
