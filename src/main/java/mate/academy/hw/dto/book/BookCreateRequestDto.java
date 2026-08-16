@@ -12,15 +12,15 @@ import org.hibernate.validator.constraints.URL;
 @Getter
 @Setter
 public class BookCreateRequestDto {
-    @NotBlank
+    @NotBlank(message = "Title must not be blank")
     private String title;
-    @NotBlank
+    @NotBlank(message = "Author must not be blank")
     private String author;
     @ISBN
-    @NotBlank
+    @NotBlank(message = "ISBN must not be blank")
     private String isbn;
     @Min(0)
-    @NotNull
+    @NotNull(message = "Price must not be blank")
     private BigDecimal price;
     private String description;
     @URL
