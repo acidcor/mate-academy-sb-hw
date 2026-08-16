@@ -44,7 +44,7 @@ public class CustomGlobalExceptionHandler {
         body.put("timestamp", LocalDateTime.now());
         String error = ex.getMessage();
         body.put("errors", error);
-        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(body, HttpStatus.CONFLICT);
     }
 }
 

@@ -1,6 +1,7 @@
 package mate.academy.hw.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import mate.academy.hw.dto.book.BookCreateRequestDto;
@@ -25,6 +26,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(value = "/books")
+@Tag(
+        name = "Books",
+        description = "Provide CRUD operations related to books"
+)
 public class BookController {
     private final BookService bookService;
 
