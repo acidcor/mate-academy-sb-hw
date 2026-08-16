@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import mate.academy.hw.dto.user.UserRegistrationRequestDto;
 import mate.academy.hw.dto.user.UserResponseDto;
+import mate.academy.hw.exceptrion.RegistrationException;
 import mate.academy.hw.service.user.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,7 +28,9 @@ public class AuthenticationController {
     @Operation(summary = "Create a new user")
     @PostMapping("/registration")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public UserResponseDto register(@RequestBody @Valid UserRegistrationRequestDto request) {
+    public UserResponseDto register(
+            @RequestBody @Valid UserRegistrationRequestDto request
+    ) throws RegistrationException {
         return userService.register(request);
     }
 }
