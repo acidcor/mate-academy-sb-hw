@@ -1,5 +1,6 @@
 package mate.academy.hw.service.user.impl;
 
+import jakarta.transaction.Transactional;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import mate.academy.hw.dto.user.UserRegistrationRequestDto;
@@ -16,8 +17,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class UserServiceImpl implements UserService {
-    private static final Role.RoleName DEFAULT_ROLE = Role.RoleName.USER;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepo;
     private final RoleRepository roleRepo;
@@ -34,11 +35,11 @@ public class UserServiceImpl implements UserService {
 
         userModel.setPassword(passwordEncoder.encode(dto.getPassword()));
 
-        Set<Role> roles = Set.of(
-                roleRepo.getByName(DEFAULT_ROLE)
-                        .orElseThrow(() -> new RegistrationException("Can't find default role "
-                                + "while registration process")));
-        userModel.setRoles(roles);
+        Role role = roleRepo.getByName(Role.RoleName.USER)
+                .orElseThrow(() -> new RegistrationException("Can't find default role "
+                + "while registration process"));
+
+        userModel.setRoles(Set.of(role));
 
         return mapper.toDto(
                 userRepo.save(userModel));

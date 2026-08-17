@@ -16,7 +16,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String email)
             throws UsernameNotFoundException {
         return userRepo.getUserByEmail(email).orElseThrow(
-                () -> new UsernameNotFoundException("Can't find user by email")
+                () -> new UsernameNotFoundException("Can't find user by email: " + email)
         );
     }
 
