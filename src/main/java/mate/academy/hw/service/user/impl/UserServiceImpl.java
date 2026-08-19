@@ -5,6 +5,7 @@ import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import mate.academy.hw.dto.user.UserRegistrationRequestDto;
 import mate.academy.hw.dto.user.UserResponseDto;
+import mate.academy.hw.exceptrion.EntityNotFoundException;
 import mate.academy.hw.exceptrion.RegistrationException;
 import mate.academy.hw.mapper.UserMapper;
 import mate.academy.hw.model.Role;
@@ -36,7 +37,7 @@ public class UserServiceImpl implements UserService {
         userModel.setPassword(passwordEncoder.encode(dto.getPassword()));
 
         Role role = roleRepo.getByName(Role.RoleName.USER)
-                .orElseThrow(() -> new RegistrationException("Can't find default role "
+                .orElseThrow(() -> new EntityNotFoundException("Can't find default role "
                 + "while registration process"));
 
         userModel.setRoles(Set.of(role));
