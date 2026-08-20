@@ -11,7 +11,7 @@ import org.hibernate.validator.constraints.URL;
 
 @Getter
 @Setter
-public class BookCreateRequestDto {
+public class BookRequestDto {
     @NotBlank(message = "Title must not be blank")
     private String title;
     @NotBlank(message = "Author must not be blank")
