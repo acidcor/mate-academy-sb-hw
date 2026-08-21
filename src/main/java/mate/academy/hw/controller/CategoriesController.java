@@ -35,14 +35,14 @@ public class CategoriesController {
     @Operation(summary = "Find all categories")
     @PreAuthorize("hasAuthority('USER')")
     @GetMapping
-    Page<CategoryResponseDto> findAllCategories(Pageable pageable) {
+    public Page<CategoryResponseDto> findAllCategories(Pageable pageable) {
         return categoryService.findAll(pageable);
     }
 
     @Operation(summary = "Find all books by category ID")
     @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/{id}/books")
-    Page<BookResponseDtoWithoutCategoryIds> findAllBooksByCategory(
+    public Page<BookResponseDtoWithoutCategoryIds> findAllBooksByCategory(
             Pageable pageable, @PathVariable Long id
     ) {
         return bookService.findAllBooksByCategory(id, pageable);
@@ -51,7 +51,7 @@ public class CategoriesController {
     @Operation(summary = "Create a new category")
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
-    CategoryResponseDto createCategory(
+    public CategoryResponseDto createCategory(
             @RequestBody @Valid CategoryRequestDto dto
     ) {
         return categoryService.save(dto);
@@ -60,7 +60,7 @@ public class CategoriesController {
     @Operation(summary = "Update a category by ID")
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}")
-    CategoryResponseDto updateCategory(
+    public CategoryResponseDto updateCategory(
             @PathVariable Long id,@RequestBody @Valid CategoryRequestDto dto
     ) {
         return categoryService.update(id, dto);
@@ -69,7 +69,7 @@ public class CategoriesController {
     @Operation(summary = "Delete a category by ID")
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
-    void deleteCategory(@PathVariable Long id) {
+    public void deleteCategory(@PathVariable Long id) {
         categoryService.delete(id);
     }
 }
