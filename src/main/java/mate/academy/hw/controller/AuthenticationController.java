@@ -40,9 +40,8 @@ public class AuthenticationController {
 
     @Operation(summary = "User login")
     @PostMapping("/login")
-    @ResponseStatus(value = HttpStatus.OK)
     public UserLoginResponseDto login(
-            @RequestBody UserLoginRequestDto request) {
+            @RequestBody @Valid UserLoginRequestDto request) {
         return authenticationService.authenticate(request);
     }
 }
