@@ -8,7 +8,9 @@ import mate.academy.hw.dto.book.BookSearchParametersDto;
 import mate.academy.hw.exceptrion.EntityNotFoundException;
 import mate.academy.hw.mapper.BookMapper;
 import mate.academy.hw.model.Book;
+import mate.academy.hw.model.Category;
 import mate.academy.hw.repository.book.BookRepository;
+import mate.academy.hw.repository.categories.CategoryRepository;
 import mate.academy.hw.repository.specifiacation.book.BookSpecificationBuilder;
 import mate.academy.hw.service.book.BookService;
 import org.springframework.data.domain.Page;
@@ -16,16 +18,23 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 @Service
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
     private final BookRepository repository;
+    private final CategoryRepository categoryRepository;
     private final BookMapper bookMapper;
     private final BookSpecificationBuilder specificationBuilder;
 
     @Override
     public BookResponseDto save(BookRequestDto requestDto) {
         Book book = bookMapper.toEntity(requestDto);
+        Set<Category> categories = findAllCategories(requestDto);
+        book.setCategories(categories);
         return bookMapper.toDto(repository.save(book));
     }
 
@@ -72,5 +81,14 @@ public class BookServiceImpl implements BookService {
     ) {
         return repository.findAllBooksByCategory(pageable, id)
                 .map(bookMapper::toDtoWithoutCategory);
+    }
+
+    private HashSet<Category> findAllCategories(BookRequestDto dto) {
+        Set<Long> categories = new java.util.HashSet<>(Set.of());
+
+        for (Category category : dto.getCategories()) {
+            categories.add(category.getId());
+        }
+        return new HashSet<>(categoryRepository.findAllById(categories));
     }
 }

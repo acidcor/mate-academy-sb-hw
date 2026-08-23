@@ -2,6 +2,7 @@ package mate.academy.hw.dto.book;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -28,6 +29,7 @@ public class BookRequestDto {
     private String description;
     @URL
     private String coverImage;
+    @NotEmpty
     private Set<Category> categories = new HashSet<>();
 
 }
