@@ -1,5 +1,7 @@
 package mate.academy.hw.service.book.impl;
 
+import java.util.HashSet;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import mate.academy.hw.dto.book.BookRequestDto;
 import mate.academy.hw.dto.book.BookResponseDto;
@@ -17,10 +19,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
