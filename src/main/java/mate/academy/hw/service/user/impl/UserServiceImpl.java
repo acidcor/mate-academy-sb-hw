@@ -9,7 +9,9 @@ import mate.academy.hw.exceptrion.EntityNotFoundException;
 import mate.academy.hw.exceptrion.RegistrationException;
 import mate.academy.hw.mapper.UserMapper;
 import mate.academy.hw.model.Role;
+import mate.academy.hw.model.ShoppingCart;
 import mate.academy.hw.model.User;
+import mate.academy.hw.repository.cart.ShoppingCartRepository;
 import mate.academy.hw.repository.role.RoleRepository;
 import mate.academy.hw.repository.user.UserRepository;
 import mate.academy.hw.service.user.UserService;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepo;
+    private final ShoppingCartRepository cartRepo;
     private final RoleRepository roleRepo;
     private final UserMapper mapper;
 
@@ -42,7 +45,15 @@ public class UserServiceImpl implements UserService {
 
         userModel.setRoles(Set.of(role));
 
-        return mapper.toDto(
-                userRepo.save(userModel));
+        User user = userRepo.save(userModel);
+        addCart(user);
+
+        return mapper.toDto(user);
+    }
+
+    private void addCart(User user) {
+        ShoppingCart cart = new ShoppingCart();
+        cart.setUser(user);
+        cartRepo.save(cart);
     }
 }
