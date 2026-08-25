@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import mate.academy.hw.dto.book.BookCreateRequestDto;
+import mate.academy.hw.dto.book.BookRequestDto;
 import mate.academy.hw.dto.book.BookResponseDto;
 import mate.academy.hw.dto.book.BookSearchParametersDto;
 import mate.academy.hw.service.book.BookService;
@@ -38,7 +38,7 @@ public class BookController {
     @Operation(summary = "Add a new book")
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    public BookResponseDto createBook(@RequestBody @Valid BookCreateRequestDto requestDto) {
+    public BookResponseDto createBook(@RequestBody @Valid BookRequestDto requestDto) {
         return bookService.save(requestDto);
     }
 
@@ -77,7 +77,7 @@ public class BookController {
     @PutMapping("{id}")
     public BookResponseDto updateBook(
             @PathVariable Long id,
-            @RequestBody @Valid BookCreateRequestDto requestDto
+            @RequestBody @Valid BookRequestDto requestDto
     ) {
         return bookService.update(id, requestDto);
     }
