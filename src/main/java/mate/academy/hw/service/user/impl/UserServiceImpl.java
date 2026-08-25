@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
                     String.format("User with this email: %s already exists", dto.getEmail())
             );
         }
-        User userModel = mapper.toModel(dto);
+        User userModel = mapper.toEntity(dto);
 
         userModel.setPassword(passwordEncoder.encode(dto.getPassword()));
 
