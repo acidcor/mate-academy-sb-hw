@@ -1,13 +1,12 @@
 package mate.academy.hw.dto.cart;
 
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
+import jakarta.validation.constraints.Positive;
+import lombok.Data;
 
-@Getter
+@Data
 public class CartItemRequestDto {
-    @NotBlank
+    @Positive
     private Long bookId;
-    @Min(1)
+    @Positive
     private int quantity;
 }

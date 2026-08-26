@@ -5,8 +5,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import mate.academy.hw.dto.cart.CartItemRequestDto;
-import mate.academy.hw.dto.cart.CartItemResponseDto;
 import mate.academy.hw.dto.cart.ShoppingCartResponseDto;
+import mate.academy.hw.dto.cart.UpdateCartItemDto;
 import mate.academy.hw.service.cart.ShoppingCartService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -33,9 +33,9 @@ public class ShoppingCartController {
     @Operation(summary = "Add book to user shopping cart")
     @PreAuthorize("hasAuthority('USER')")
     @PostMapping
-    public CartItemResponseDto addBook(
+    public ShoppingCartResponseDto addBook(
             Authentication authentication,
-            @Valid CartItemRequestDto dto
+            @RequestBody @Valid CartItemRequestDto dto
     ) {
         return shoppingCartService.saveItem(authentication, dto);
     }
@@ -50,12 +50,12 @@ public class ShoppingCartController {
     @Operation(summary = "Update an item quantity in user shopping cart")
     @PreAuthorize("hasAuthority('USER')")
     @PutMapping("/items/{cartItemId}")
-    public CartItemResponseDto updateBooksFromCart(
+    public ShoppingCartResponseDto updateBooksFromCart(
             Authentication authentication,
             @PathVariable Long cartItemId,
-            @RequestBody int quantity
+            @RequestBody @Valid UpdateCartItemDto updateDto
     ) {
-        return shoppingCartService.updateBooks(authentication, cartItemId, quantity);
+        return shoppingCartService.updateBooks(authentication, cartItemId, updateDto);
     }
 
     @Operation(summary = "Delete an item from user shopping cart")

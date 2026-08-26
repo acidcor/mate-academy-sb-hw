@@ -14,4 +14,6 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
             String shoppingCartUserEmail,
             Long id
     );
+
+    CartItem getCartItemByIdAndShoppingCartId(Long id, Long shoppingCartId);
 }

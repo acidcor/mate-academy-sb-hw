@@ -1,97 +1,114 @@
 package mate.academy.hw.service.cart.impl;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import mate.academy.hw.dto.cart.CartItemRequestDto;
-import mate.academy.hw.dto.cart.CartItemResponseDto;
 import mate.academy.hw.dto.cart.ShoppingCartResponseDto;
+import mate.academy.hw.dto.cart.UpdateCartItemDto;
 import mate.academy.hw.exceptrion.EntityNotFoundException;
-import mate.academy.hw.mapper.CartItemMapper;
 import mate.academy.hw.mapper.ShoppingCartMapper;
+import mate.academy.hw.model.Book;
 import mate.academy.hw.model.CartItem;
 import mate.academy.hw.model.ShoppingCart;
+import mate.academy.hw.model.User;
+import mate.academy.hw.repository.book.BookRepository;
 import mate.academy.hw.repository.cart.CartItemRepository;
 import mate.academy.hw.repository.cart.ShoppingCartRepository;
 import mate.academy.hw.service.cart.ShoppingCartService;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
+@Transactional
 public class ShoppingCartServiceImpl implements ShoppingCartService {
-    private static final int DEFAULT_QUANTITY = 1;
+    private static final int DEFAULT_QUANTITY = 0;
     private static final int DEFAULT_INCREMENT = 1;
     private final ShoppingCartRepository shoppingCartRepository;
     private final CartItemRepository cartItemRepository;
-    private final CartItemMapper itemMapper;
     private final ShoppingCartMapper cartMapper;
+    private final BookRepository bookRepository;
 
     @Override
     public ShoppingCartResponseDto getCart(Authentication authentication) {
-        String email = authentication.getName();
-        ShoppingCart cart = shoppingCartRepository.findByUserEmail(email);
-        return cartMapper.toDto(cart);
+        return cartMapper.toDto(getCartInner(authentication));
     }
 
     @Override
-    public CartItemResponseDto saveItem(
+    public ShoppingCartResponseDto saveItem(
             Authentication authentication,
             CartItemRequestDto dto
     ) {
+        Long bookId = dto.getBookId();
         ShoppingCart cart = getCartInner(authentication);
-        CartItem existed = cartItemRepository
-                .getCartItemByBook_IdAndShoppingCart_Id(dto.getBookId(), cart.getId());
+        Book book = bookRepository.findById(bookId).orElseThrow(
+                        () -> new EntityNotFoundException("Can't find a book by id: " + bookId)
+        );
 
-        if (existed != null) {
-            existed.setQuantity(existed.getQuantity() + DEFAULT_INCREMENT);
-            return itemMapper.toDto(cartItemRepository.save(existed));
-        }
+        CartItem updatedItem = cart.getCartItems().stream()
+                .filter(item -> item.getBook().getId().equals(bookId))
+                .findFirst()
+                .orElseGet(
+                        () -> {
+                            CartItem newItem = new CartItem();
+                            newItem.setShoppingCart(cart);
+                            newItem.setBook(book);
+                            newItem.setQuantity(DEFAULT_QUANTITY);
+                            cart.getCartItems().add(newItem);
+                            return newItem;
+                        }
+                );
 
-        CartItem item = itemMapper.toEntity(dto);
-        item.setQuantity(DEFAULT_QUANTITY);
-        item.setShoppingCart(cart);
-        return itemMapper.toDto(cartItemRepository.save(item));
+        updatedItem.setQuantity(updatedItem.getQuantity() + DEFAULT_INCREMENT);
+        return cartMapper.toDto(shoppingCartRepository.save(cart));
     }
 
     @Override
-    public CartItemResponseDto updateBooks(
+    public ShoppingCartResponseDto updateBooks(
             Authentication authentication,
             Long id,
-            int quantity
+            UpdateCartItemDto updateDto
     ) {
-        CartItem item = cartItemRepository
-                .getCartItemByShoppingCart_User_EmailAndId(
-                        authentication.getName(),
-                        id
-                ).orElseThrow(
-                    () -> new EntityNotFoundException(
-                        "Can't find cart item by ID: " + id
-                )
-        );
+        ShoppingCart cart = getCartInner(authentication);
+        Long cartId = cart.getId();
+        CartItem cartItem = cartItemRepository.getCartItemByIdAndShoppingCartId(id, cartId);
 
-        if (quantity < 0) {
-            quantity = 0;
+        if (cartItem == null) {
+            throw new EntityNotFoundException(
+                    String.format("Can't item by id '%s' in shopping cart: %s",
+                            id, cartId)
+            );
         }
 
-        item.setQuantity(quantity);
-        return itemMapper.toDto(cartItemRepository.save(item));
+        cartItem.setQuantity(updateDto.getQuantity());
+        return cartMapper.toDto(shoppingCartRepository.save(cart));
     }
 
     @Override
     public void deleteBook(Authentication authentication, Long cartItemId) {
-        CartItem item = cartItemRepository
-                .getCartItemByShoppingCart_User_EmailAndId(
-                        authentication.getName(),
-                        cartItemId)
-                .orElseThrow(
-                    () -> new EntityNotFoundException(
-                        "Can't find cart item by ID: " + cartItemId
-                )
+        ShoppingCart cart = getCartInner(authentication);
+        CartItem cartItem = cartItemRepository.getCartItemByIdAndShoppingCartId(
+                cartItemId, cart.getId()
         );
-        cartItemRepository.delete(item);
+        cartItemRepository.delete(cartItem);
     }
 
     private ShoppingCart getCartInner(Authentication authentication) {
-        String email = authentication.getName();
-        return shoppingCartRepository.findByUserEmail(email);
+        User user = (User) authentication.getPrincipal();
+        if (user == null) {
+            throw new UsernameNotFoundException(
+                    "Can't find user with sutch email: "
+                            + authentication.getName()
+            );
+        }
+        return shoppingCartRepository.findByUserId(user.getId());
+    }
+
+    @Override
+    public void addCart(User user) {
+        ShoppingCart cart = new ShoppingCart();
+        cart.setUser(user);
+        shoppingCartRepository.save(cart);
     }
 }
