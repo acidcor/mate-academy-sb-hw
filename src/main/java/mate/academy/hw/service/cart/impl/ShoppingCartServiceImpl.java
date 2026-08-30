@@ -2,9 +2,9 @@ package mate.academy.hw.service.cart.impl;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import mate.academy.hw.dto.cart.CartItemRequestDto;
 import mate.academy.hw.dto.cart.ShoppingCartResponseDto;
 import mate.academy.hw.dto.cart.UpdateCartItemDto;
+import mate.academy.hw.dto.cart.item.CartItemRequestDto;
 import mate.academy.hw.exceptrion.EntityNotFoundException;
 import mate.academy.hw.mapper.ShoppingCartMapper;
 import mate.academy.hw.model.Book;
@@ -61,6 +61,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 );
 
         updatedItem.setQuantity(updatedItem.getQuantity() + DEFAULT_INCREMENT);
+        System.out.println("USER ID = " + ((User) authentication.getPrincipal()).getId());
+        System.out.println("CART ID = " + cart.getId());
         return cartMapper.toDto(shoppingCartRepository.save(cart));
     }
 
@@ -102,7 +104,9 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                             + authentication.getName()
             );
         }
-        return shoppingCartRepository.findByUserId(user.getId());
+        ShoppingCart cart = shoppingCartRepository.findShoppingCartByUser_Id(user.getId());
+        System.out.println(cart.getId());
+        return cart;
     }
 
     @Override

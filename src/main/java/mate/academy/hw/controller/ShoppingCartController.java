@@ -4,9 +4,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import mate.academy.hw.dto.cart.CartItemRequestDto;
 import mate.academy.hw.dto.cart.ShoppingCartResponseDto;
 import mate.academy.hw.dto.cart.UpdateCartItemDto;
+import mate.academy.hw.dto.cart.item.CartItemRequestDto;
 import mate.academy.hw.service.cart.ShoppingCartService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -35,7 +35,7 @@ public class ShoppingCartController {
     @PostMapping
     public ShoppingCartResponseDto addBook(
             Authentication authentication,
-            @RequestBody @Valid CartItemRequestDto dto
+            @RequestBody CartItemRequestDto dto
     ) {
         return shoppingCartService.saveItem(authentication, dto);
     }

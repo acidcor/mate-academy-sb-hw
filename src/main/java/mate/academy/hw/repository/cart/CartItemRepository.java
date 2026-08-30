@@ -1,6 +1,7 @@
 package mate.academy.hw.repository.cart;
 
 import java.util.Optional;
+import java.util.Set;
 import mate.academy.hw.model.CartItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -16,4 +17,6 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
     );
 
     CartItem getCartItemByIdAndShoppingCartId(Long id, Long shoppingCartId);
+
+    Set<CartItem> getCartItemsByShoppingCart_Id(Long shoppingCartId);
 }

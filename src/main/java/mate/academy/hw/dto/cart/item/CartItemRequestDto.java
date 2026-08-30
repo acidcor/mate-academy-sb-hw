@@ -1,4 +1,4 @@
-package mate.academy.hw.dto.cart;
+package mate.academy.hw.dto.cart.item;
 
 import jakarta.validation.constraints.Positive;
 import lombok.Data;

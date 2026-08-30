@@ -1,8 +1,8 @@
 package mate.academy.hw.service.cart;
 
-import mate.academy.hw.dto.cart.CartItemRequestDto;
 import mate.academy.hw.dto.cart.ShoppingCartResponseDto;
 import mate.academy.hw.dto.cart.UpdateCartItemDto;
+import mate.academy.hw.dto.cart.item.CartItemRequestDto;
 import mate.academy.hw.model.User;
 import org.springframework.security.core.Authentication;
 

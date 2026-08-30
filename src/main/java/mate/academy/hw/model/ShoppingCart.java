@@ -24,7 +24,7 @@ public class ShoppingCart {
     @MapsId
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(
-            name = "user_id",
+            name = "id",
             unique = true,
             nullable = false
     )
