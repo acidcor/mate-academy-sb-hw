@@ -11,7 +11,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     primaryKey: true
-                    primaryKeyName: pk_shopping_carts
+                    primaryKeyName: pk_orders
                   name: id
                   type: BIGINT
               - column:
