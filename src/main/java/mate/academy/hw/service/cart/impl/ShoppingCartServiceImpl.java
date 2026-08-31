@@ -2,9 +2,9 @@ package mate.academy.hw.service.cart.impl;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import mate.academy.hw.dto.cart.CartItemRequestDto;
 import mate.academy.hw.dto.cart.ShoppingCartResponseDto;
 import mate.academy.hw.dto.cart.UpdateCartItemDto;
+import mate.academy.hw.dto.cart.item.CartItemRequestDto;
 import mate.academy.hw.exceptrion.EntityNotFoundException;
 import mate.academy.hw.mapper.ShoppingCartMapper;
 import mate.academy.hw.model.Book;
@@ -102,7 +102,11 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                             + authentication.getName()
             );
         }
-        return shoppingCartRepository.findByUserId(user.getId());
+        Long userId = user.getId();
+        return shoppingCartRepository.findShoppingCartByUser_Id(userId)
+                .orElseThrow(() -> new UsernameNotFoundException(
+                "Can't find car with sutch by user ID: " + userId)
+        );
     }
 
     @Override

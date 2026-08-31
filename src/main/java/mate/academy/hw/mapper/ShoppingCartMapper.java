@@ -1,8 +1,8 @@
 package mate.academy.hw.mapper;
 
 import mate.academy.hw.config.MapperConfig;
-import mate.academy.hw.dto.cart.CartItemResponseDto;
 import mate.academy.hw.dto.cart.ShoppingCartResponseDto;
+import mate.academy.hw.dto.cart.item.CartItemResponseDto;
 import mate.academy.hw.model.CartItem;
 import mate.academy.hw.model.ShoppingCart;
 import org.mapstruct.Mapper;
