@@ -61,8 +61,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                 );
 
         updatedItem.setQuantity(updatedItem.getQuantity() + DEFAULT_INCREMENT);
-        System.out.println("USER ID = " + ((User) authentication.getPrincipal()).getId());
-        System.out.println("CART ID = " + cart.getId());
         return cartMapper.toDto(shoppingCartRepository.save(cart));
     }
 
@@ -104,9 +102,11 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
                             + authentication.getName()
             );
         }
-        ShoppingCart cart = shoppingCartRepository.findShoppingCartByUser_Id(user.getId());
-        System.out.println(cart.getId());
-        return cart;
+        Long userId = user.getId();
+        return shoppingCartRepository.findShoppingCartByUser_Id(userId)
+                .orElseThrow(() -> new UsernameNotFoundException(
+                "Can't find car with sutch by user ID: " + userId)
+        );
     }
 
     @Override

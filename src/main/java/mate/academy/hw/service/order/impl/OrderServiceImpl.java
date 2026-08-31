@@ -41,12 +41,12 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void addOrder(Authentication authentication, OrderUserRequestDto request) {
         User user = getUserInner(authentication);
-        ShoppingCart cart = cartRepository.findShoppingCartByUser_Id(user.getId());
-        if (cart == null) {
-            throw new EntityNotFoundException(
-                    "Can't find cart by user e-mail: " + authentication.getName()
-            );
-        }
+        ShoppingCart cart = cartRepository.findShoppingCartByUser_Id(user.getId()).orElseThrow(
+                () -> new EntityNotFoundException(
+                        "Can't find cart by user e-mail: " + authentication.getName()
+                )
+        );
+
         Set<CartItem> cartItems = cart.getCartItems();
         if (cartItems.isEmpty()) {
             throw new EntityNotFoundException(
@@ -94,16 +94,13 @@ public class OrderServiceImpl implements OrderService {
             Pageable pageable
     ) {
         Long userId = getUserInner(authentication).getId();
-        Page<OrderItem> items = orderItemRepository.findOrderItemsByOrder_IdAndOrder_User_Id(
-                orderId,
-                userId,
-                pageable
-        );
+        Page<OrderItem> items = orderItemRepository
+                .findOrderItemsByOrder_IdAndOrder_User_Id(orderId, userId, pageable);
+
         if (items.isEmpty()) {
             throw new EntityNotFoundException(String.format(
                     "Can't find any ordered items by order ID %s, for user e-mail '%s'",
-                    userId, orderId
-            )
+                    userId, orderId)
             );
         }
         return items.map(orderItemMapper::toDto);
@@ -116,18 +113,12 @@ public class OrderServiceImpl implements OrderService {
             Long itemId
     ) {
         Long userId = getUserInner(authentication).getId();
-        OrderItem item = orderItemRepository.findOrderItemByOrder_IdAndOrder_User_IdAndId(
-                orderId,
-                userId,
-                itemId
-        );
-        if (item == null) {
-            throw new EntityNotFoundException(String.format(
-                    "Can't find ordered item at order ID %s, for user e-mail '%s' by ID %s",
-                    orderId, userId, itemId
-            )
-            );
-        }
+        OrderItem item = orderItemRepository
+                .findOrderItemByOrder_IdAndOrder_User_IdAndId(orderId, userId, itemId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format(
+                "Can't find ordered item at order ID %s, for user e-mail '%s' by ID %s",
+                orderId, userId, itemId)));
+
         return orderItemMapper.toDto(item);
     }
 

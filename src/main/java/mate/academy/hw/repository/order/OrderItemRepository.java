@@ -1,5 +1,6 @@
 package mate.academy.hw.repository.order;
 
+import java.util.Optional;
 import mate.academy.hw.model.OrderItem;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +15,7 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
             Pageable pageable
     );
 
-    OrderItem findOrderItemByOrder_IdAndOrder_User_IdAndId(
+    Optional<OrderItem> findOrderItemByOrder_IdAndOrder_User_IdAndId(
             Long orderId,
             Long userId,
             Long itemId

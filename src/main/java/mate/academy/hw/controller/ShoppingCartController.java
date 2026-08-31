@@ -35,7 +35,7 @@ public class ShoppingCartController {
     @PostMapping
     public ShoppingCartResponseDto addBook(
             Authentication authentication,
-            @RequestBody CartItemRequestDto dto
+            @RequestBody @Valid CartItemRequestDto dto
     ) {
         return shoppingCartService.saveItem(authentication, dto);
     }
