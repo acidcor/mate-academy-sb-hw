@@ -1,0 +1,1 @@
+INSERT INTO books (id, title, author, isbn, price) VALUES (1, "test", "test", "123123123123", 10.99);

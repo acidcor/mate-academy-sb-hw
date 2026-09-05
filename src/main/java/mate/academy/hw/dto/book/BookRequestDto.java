@@ -9,12 +9,14 @@ import java.util.HashSet;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 import mate.academy.hw.model.Category;
 import org.hibernate.validator.constraints.ISBN;
 import org.hibernate.validator.constraints.URL;
 
 @Getter
 @Setter
+@Accessors(chain = true)
 public class BookRequestDto {
     @NotBlank(message = "Title must not be blank")
     private String title;
